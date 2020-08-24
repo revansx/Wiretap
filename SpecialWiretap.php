@@ -302,10 +302,15 @@ class SpecialWiretap extends SpecialPage {
 
 		$rows = $this->getUniqueRows( $showUniquePageHits, "DESC" );
 
+		$fp = fopen("/opt/htdocs/UUHitsforWiki1_".str_replace("/","",str_replace("Special:Wiretap","",SpecialPage::getTitleFor('Wiretap')->getLocalURL())).".txt", 'w');
+                fwrite($fp, "Date, UUHits\n" );
+		
 		foreach($rows as $row) {
 			$html .= "<tr><td>{$row['date']}</td><td>{$row['hits']}</td></tr>";
+			fwrite($fp, str_replace("-","/","{$row['date']}, {$row['hits']}\n" ) );
 		}
 
+		fclose($fp);
 		$html .= "</table>";
 
 		$wgOut->addHTML( $html );
